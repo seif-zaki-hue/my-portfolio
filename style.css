@@ -1,4 +1,4 @@
-/* Version 3 - updated 2026-10-14 */
+/* Version 4 - updated 2026-10-14 */
 /* Seif Zaki portfolio styles */
 
 :root {
@@ -452,6 +452,43 @@ section { max-width: 1150px; margin: 0 auto; padding: 6rem 1.5rem; }
 }
 .cv-item p { color: var(--muted); font-size: .9rem; }
 
+/* projects */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 1.4rem;
+}
+.project-card {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: .9rem;
+  padding: 1.6rem;
+  background: linear-gradient(160deg, #121a2b, var(--card) 70%);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  transition: transform .25s, border-color .3s, box-shadow .3s;
+}
+.project-card::before {
+  content: '';
+  position: absolute; inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--gradient);
+}
+.project-card:hover { transform: translateY(-6px); border-color: rgba(230,36,41,.5); box-shadow: 0 25px 50px rgba(0,0,0,.6); }
+.project-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.project-icon {
+  width: 54px; height: 54px;
+  display: grid; place-items: center;
+  border-radius: 15px;
+  background: var(--gradient);
+  font-size: 1.7rem;
+}
+.project-tag { color: var(--muted); font: .75rem 'JetBrains Mono', monospace; }
+.project-card h3 { color: #fff; font-size: 1.25rem; }
+.project-card p { color: var(--muted); font-size: .92rem; }
+.project-card .skills { margin-top: 0; }
+.project-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: auto; padding-top: .4rem; }
+.project-actions .btn { padding: .7rem 1.2rem; font-size: .85rem; }
+
 /* certificates */
 .search {
   display: block; width: 100%; max-width: 420px;
@@ -778,6 +815,7 @@ footer {
   .contact { padding: 2.5rem 1.2rem; }
   .contact-item { width: 100%; }
   .cv-actions .btn { flex: 1 1 100%; text-align: center; }
+  .project-actions .btn { flex: 1 1 100%; text-align: center; }
   .modal { padding: .6rem; }
   .modal-box { height: 88vh; }
 

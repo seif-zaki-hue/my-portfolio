@@ -1,0 +1,151 @@
+<!-- Version 4 - updated 2026-10-14 -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#05070d" />
+    <title>BMI Calculator — Seif Zaki</title>
+    <meta name="description" content="BMI calculator written in Python and running in the browser with PyScript." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚖️%3C/text%3E%3C/svg%3E" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet" />
+
+    <!-- PyScript: runs bmi_app.py (real Python) in the browser -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.11.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.11.1/core.js"></script>
+
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --bg: #05070d; --card: #0f1420; --border: #1e2533;
+        --text: #e5e7eb; --muted: #8892a6; --accent: #ff2d55;
+        --gradient: linear-gradient(135deg, #e62429, #3b82f6);
+      }
+      body {
+        min-height: 100vh;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 1.2rem;
+        padding: 2rem 1.1rem;
+        font-family: 'Inter', system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 15% 15%, rgba(230,36,41,.16), transparent 45%),
+          radial-gradient(circle at 85% 80%, rgba(59,130,246,.16), transparent 45%),
+          var(--bg);
+      }
+      .back { align-self: center; color: var(--muted); font: .85rem 'JetBrains Mono', monospace; text-decoration: none; }
+      .back:hover { color: var(--accent); }
+
+      .card {
+        position: relative; overflow: hidden;
+        width: 100%; max-width: 440px;
+        padding: 2rem 1.6rem 1.8rem;
+        background: linear-gradient(160deg, #121a2b, #0b1019 70%);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 20px;
+        box-shadow: 0 25px 70px rgba(0,0,0,.65), 0 0 40px rgba(59,130,246,.12);
+      }
+      .card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--gradient); }
+
+      .icon {
+        width: 64px; height: 64px; margin: 0 auto 1rem;
+        display: grid; place-items: center;
+        border-radius: 18px; font-size: 2rem;
+        background: var(--gradient);
+        box-shadow: 0 8px 30px rgba(230,36,41,.35);
+      }
+      h1 { text-align: center; font: 400 2.2rem 'Bebas Neue', sans-serif; letter-spacing: 3px; }
+      .sub { margin: .2rem 0 1.5rem; text-align: center; color: var(--muted); font: .78rem 'JetBrains Mono', monospace; }
+
+      label { display: block; margin: 1rem 0 .4rem; color: var(--muted); font-size: .85rem; font-weight: 600; }
+      input {
+        width: 100%; padding: .85rem 1rem;
+        background: #0a0e17; color: var(--text);
+        border: 1px solid var(--border); border-radius: 12px;
+        font: 400 1rem 'Inter', sans-serif;
+        transition: border-color .25s, box-shadow .25s;
+      }
+      input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,45,85,.15); }
+      .hint { margin-top: .35rem; color: var(--muted); font-size: .72rem; }
+
+      .buttons { display: flex; gap: .8rem; margin-top: 1.6rem; }
+      button {
+        flex: 1; padding: .9rem 1rem;
+        border: none; border-radius: 12px;
+        font: 700 .95rem 'Inter', sans-serif; cursor: pointer;
+        transition: transform .2s, box-shadow .2s, opacity .2s;
+      }
+      button:hover:not(:disabled) { transform: translateY(-2px); }
+      #calc { background: var(--gradient); color: #fff; box-shadow: 0 4px 22px rgba(230,36,41,.4); }
+      #calc:disabled { opacity: .5; cursor: wait; }
+      #clear { background: transparent; color: var(--text); border: 1px solid var(--border); }
+      #clear:hover { border-color: #3b82f6; }
+
+      #loading { margin-top: 1rem; text-align: center; color: var(--muted); font: .78rem 'JetBrains Mono', monospace; }
+
+      .out { margin-top: 1.6rem; text-align: center; min-height: 3.4rem; }
+      #bmi-value { font: 400 3rem/1 'Bebas Neue', sans-serif; letter-spacing: 2px; }
+      #result { margin-top: .3rem; font-size: 1.05rem; font-weight: 700; }
+
+      #gauge { display: none; position: relative; margin: 1.2rem .3rem 0; }
+      .bar {
+        height: 10px; border-radius: 99px;
+        background: linear-gradient(90deg,
+          #3b82f6 0 28.3%, #22c55e 28.3% 50%, #facc15 50% 66.7%, #fb923c 66.7% 83.3%, #ef4444 83.3% 100%);
+      }
+      #marker {
+        position: absolute; top: -5px; left: 0;
+        width: 4px; height: 20px; margin-left: -2px;
+        background: #fff; border-radius: 3px;
+        box-shadow: 0 0 10px rgba(255,255,255,.9);
+        transition: left .5s cubic-bezier(.2,.8,.2,1);
+      }
+      .scale { display: flex; justify-content: space-between; margin-top: .45rem; color: var(--muted); font: .68rem 'JetBrains Mono', monospace; }
+
+      .note { max-width: 440px; text-align: center; color: var(--muted); font-size: .75rem; line-height: 1.5; }
+      .note b { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <a class="back" href="index.html#projects">← Back to portfolio</a>
+
+    <main class="card">
+      <div class="icon" aria-hidden="true">⚖️</div>
+      <h1>BMI Calculator</h1>
+      <p class="sub"># written in Python</p>
+
+      <label for="weight">Enter your Weight in KG</label>
+      <input id="weight" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 70" />
+
+      <label for="height">Enter your Height in M</label>
+      <input id="height" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 1.75" />
+      <p class="hint">Meters (1.75). Centimeters (175) work too.</p>
+
+      <div class="buttons">
+        <button id="calc" type="button" disabled>Calculate</button>
+        <button id="clear" type="button">Clear</button>
+      </div>
+      <p id="loading">⏳ Loading Python… (first time takes a few seconds)</p>
+
+      <div class="out" aria-live="polite">
+        <div id="bmi-value"></div>
+        <div id="result"></div>
+        <div id="gauge">
+          <div class="bar"></div>
+          <div id="marker"></div>
+          <div class="scale"><span>10</span><span>18.5</span><span>25</span><span>30</span><span>35</span><span>40</span></div>
+        </div>
+      </div>
+    </main>
+
+    <p class="note">
+      This page runs <b>real Python</b> in your browser using PyScript.
+      The code is in <a href="bmi_app.py" style="color:inherit">bmi_app.py</a>.
+    </p>
+
+    <script type="py" src="bmi_app.py"></script>
+  </body>
+</html>

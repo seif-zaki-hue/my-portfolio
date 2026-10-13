@@ -1,4 +1,4 @@
-<!-- Version 3 - updated 2026-10-14 -->
+<!-- Version 4 - updated 2026-10-14 -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -30,7 +30,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css?v=3" />
+    <link rel="stylesheet" href="style.css?v=4" />
   </head>
   <body>
     <div id="progress"></div>
@@ -55,6 +55,7 @@
       <ul id="navLinks">
         <li><a href="#about">About</a></li>
         <li><a href="#cv">CV</a></li>
+        <li><a href="#projects">Projects</a></li>
         <li><a href="#certs">Certifications</a></li>
         <li><a href="#game">Game</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -269,6 +270,37 @@
       </div>
     </section>
 
+    <section id="projects">
+      <div class="reveal">
+        <h2 class="section-title">My <span class="grad">Projects</span></h2>
+        <p class="section-sub">// small things I built with Python</p>
+        <div class="project-grid">
+          <article class="project-card">
+            <div class="project-top">
+              <span class="project-icon" aria-hidden="true">⚖️</span>
+              <span class="project-tag">Python · PyScript</span>
+            </div>
+            <h3>BMI Calculator</h3>
+            <p>
+              Enter your weight and height and get your BMI with a clear
+              category and a color gauge. Started as a Tkinter desktop app; the
+              web version runs the same Python logic right in your browser.
+            </p>
+            <div class="skills">
+              <span class="skill">Python</span>
+              <span class="skill">Tkinter</span>
+              <span class="skill">PyScript</span>
+            </div>
+            <div class="project-actions">
+              <a class="btn btn-primary" href="bmi.html">Launch app →</a>
+              <a class="btn btn-ghost" href="bmi_tkinter.py" target="_blank" rel="noopener">Tkinter code</a>
+              <a class="btn btn-ghost" href="bmi_app.py" target="_blank" rel="noopener">Web code</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section id="certs">
       <div class="reveal">
         <h2 class="section-title">
@@ -407,7 +439,7 @@
     <footer>
       <p>© 2026 Seif El-Sayed Zaki. Made with Love</p>
       <p>Spider-Man energy.</p>
-      <p style="opacity:.45;font-size:.72rem">v3 · Oct 2026</p>
+      <p style="opacity:.45;font-size:.72rem">v4 · Oct 2026</p>
     </footer>
     <button id="toTop" type="button" aria-label="Back to top">↑</button>
 
@@ -432,8 +464,8 @@
       </div>
     </div>
 
-    <script src="certificates.js?v=3"></script>
-    <script src="main.js?v=3"></script>
-    <script src="game.js?v=3"></script>
+    <script src="certificates.js?v=4"></script>
+    <script src="main.js?v=4"></script>
+    <script src="game.js?v=4"></script>
   </body>
 </html>
