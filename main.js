@@ -1,3 +1,4 @@
+// Version 3 - updated 2026-10-14
 // Page behaviour: menu, certificates, preview popup, typing text and the small effects.
 // The game has its own file (game.js) and the certificate list is in certificates.js.
 
