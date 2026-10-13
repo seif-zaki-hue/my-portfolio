@@ -1,5 +1,5 @@
 // Web Catcher - the little game at the bottom of the page.
-// Move Spider-Man, catch fruit, dodge bombs. Every 5 levels a scorpion boss shows up,
+// Fly Spider-Man anywhere (free 2D movement), catch fruit, dodge bombs. Every 5 levels a scorpion boss shows up,
 // and from level 10 allies help out.
 
 (function () {
@@ -11,7 +11,8 @@
   const WIDTH = 720;
   const HEIGHT = 420;
   const PLAYER_W = 58;
-  const PLAYER_Y = HEIGHT - 48;
+  const MIN_Y = 115;                 // keep Spidey below the score bar
+  const MAX_Y = HEIGHT - 40;
 
   // render at 2x on retina / phone screens so it isn't blurry
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -59,11 +60,12 @@
       time: 0, last: 0, spawnTimer: 0.5,
       score: 0, lives: 3, level: 1, combo: 0, comboTimer: 0,
       x: WIDTH / 2, targetX: WIDTH / 2,
+      y: HEIGHT - 70, targetY: HEIGHT - 70,
       items: [], particles: [], webShots: [],
       heart: null, boss: null,
       shield: 0, shieldCooldown: 0, slow: 0,
       webBoost: 0, webCooldown: 0, allies: 0,
-      flash: 0, shake: 0,
+      flash: 0, shake: 0, vx: 0, vy: 0,
     };
   }
   let g = newState();
@@ -220,6 +222,8 @@
   function movePlayer(e) {
     const box = canvas.getBoundingClientRect();
     g.targetX = (e.clientX - box.left) / box.width * WIDTH;
+    const lift = e.pointerType === 'touch' ? 55 : 18;           // keep Spidey visible above the finger
+    g.targetY = (e.clientY - box.top) / box.height * HEIGHT - lift;
   }
 
   canvas.addEventListener('pointermove', movePlayer);
@@ -242,9 +246,9 @@
     const key = e.key.toLowerCase();
     const playing = g.running && !g.paused && onScreen;
 
-    if (['arrowleft', 'arrowright', 'a', 'd'].includes(key)) {
+    if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'a', 'd', 'w', 's'].includes(key)) {
       keys[key] = true;
-      if (playing) e.preventDefault();         // stop the page from scrolling sideways
+      if (playing) e.preventDefault();         // stop the page from scrolling
     }
     if (key === ' ' && playing) {
       e.preventDefault();
@@ -333,7 +337,7 @@
     if (!g.running || g.paused || g.shieldCooldown > 0) return;
     g.shield = 3.2;
     g.shieldCooldown = 9;
-    burst(g.x, PLAYER_Y, '#3b82f6', 18);
+    burst(g.x, g.y, '#22d3ee', 18);
     beep(760, 0.12);
     updateHud();
   }
@@ -346,7 +350,7 @@
 
     g.webShots.push({
       x: g.x,
-      y: PLAYER_Y - 22,
+      y: g.y - 22,
       speed: 430 + Math.min(1100, tier * 90),
       width: Math.min(38, (8 + tier * 2) * boost),
       damage: tier * boost,
@@ -354,7 +358,7 @@
     });
     g.webCooldown = Math.max(0.07, 0.48 - g.level * 0.012);
 
-    burst(g.x, PLAYER_Y - 20, g.webBoost > 0 ? '#facc15' : '#dbeafe', 4 + tier * 2);
+    burst(g.x, g.y - 20, g.webBoost > 0 ? '#facc15' : '#dbeafe', 4 + tier * 2);
     beep(660 + Math.min(600, tier * 35), 0.05, 'triangle');
   }
 
@@ -494,8 +498,14 @@
     const moveSpeed = 460 + Math.min(260, (g.level - 1) * 12);
     if (keys.arrowleft || keys.a) g.targetX -= moveSpeed * dt;
     if (keys.arrowright || keys.d) g.targetX += moveSpeed * dt;
+    if (keys.arrowup || keys.w) g.targetY -= moveSpeed * dt;
+    if (keys.arrowdown || keys.s) g.targetY += moveSpeed * dt;
     g.targetX = clamp(g.targetX, PLAYER_W / 2, WIDTH - PLAYER_W / 2);
-    g.x += (g.targetX - g.x) * Math.min(1, dt * 13);
+    g.targetY = clamp(g.targetY, MIN_Y, MAX_Y);
+    g.vx = (g.targetX - g.x) * Math.min(1, dt * 13);
+    g.vy = (g.targetY - g.y) * Math.min(1, dt * 13);
+    g.x += g.vx;
+    g.y += g.vy;
 
     if (touching) shootWeb();
 
@@ -515,9 +525,9 @@
     for (const item of g.items) {
       item.y += item.speed * (g.slow > 0 ? 0.52 : 1) * dt;
       item.angle += item.spin * dt;
-      const sameHeight = item.y > PLAYER_Y - 28 && item.y < PLAYER_Y + 22;
-      const sameColumn = Math.abs(item.x - g.x) < PLAYER_W / 2 + item.radius;
-      if (!item.done && sameHeight && sameColumn) collect(item);
+      const hit = Math.abs(item.x - g.x) < PLAYER_W / 2 + item.radius - 4 &&
+                  Math.abs(item.y - (g.y - 4)) < 30 + item.radius - 4;
+      if (!item.done && hit) collect(item);
     }
     g.items = g.items.filter(i => !i.done && i.y < HEIGHT + 40);
 
@@ -526,11 +536,11 @@
       g.heart.y += g.heart.speed * dt;
       g.heart.wobble += dt * 5;
       const caught = Math.abs(g.heart.x - g.x) < PLAYER_W / 2 + g.heart.radius &&
-                     g.heart.y > PLAYER_Y - 28 && g.heart.y < PLAYER_Y + 28;
+                     Math.abs(g.heart.y - (g.y - 4)) < 30 + g.heart.radius;
       if (caught) {
         g.heart = null;
         g.lives = Math.min(9, g.lives + 1);
-        burst(g.x, PLAYER_Y, '#fb7185', 24);
+        burst(g.x, g.y, '#fb7185', 24);
         beep(1180, 0.12);
         updateHud();
       } else if (g.heart.y > HEIGHT + 30) {
@@ -545,7 +555,7 @@
         if (Math.random() < dt * (1 + count * 0.35)) {
           g.webShots.push({
             x: clamp(g.x + (i - (count - 1) / 2) * 58, 20, WIDTH - 20),
-            y: PLAYER_Y - 30,
+            y: g.y - 30,
             speed: 520 + g.level * 12,
             width: Math.min(24, 7 + count * 2),
             damage: 2 + Math.floor(g.level / 10),
@@ -816,32 +826,40 @@
 
     // background
     const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT);
-    sky.addColorStop(0, '#123b65');
-    sky.addColorStop(0.48, '#182d58');
-    sky.addColorStop(1, '#351747');
+    sky.addColorStop(0, '#0b1a4a');
+    sky.addColorStop(0.45, '#2a1066');
+    sky.addColorStop(1, '#5a1450');
     ctx.fillStyle = sky;
     ctx.fillRect(-20, -20, WIDTH + 40, HEIGHT + 40);
 
-    const glow = ctx.createRadialGradient(WIDTH * 0.5, HEIGHT * 0.48, 15, WIDTH * 0.5, HEIGHT * 0.48, 390);
-    glow.addColorStop(0, 'rgba(34,211,238,.16)');
+    const glow = ctx.createRadialGradient(WIDTH * 0.5, HEIGHT * 0.5, 15, WIDTH * 0.5, HEIGHT * 0.5, 400);
+    glow.addColorStop(0, 'rgba(34,211,238,.22)');
+    glow.addColorStop(0.6, 'rgba(168,85,247,.10)');
     glow.addColorStop(1, 'rgba(34,211,238,0)');
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    ctx.strokeStyle = 'rgba(147,220,255,.14)';
+    // neon sun / horizon glow at the bottom
+    const horizon = ctx.createLinearGradient(0, HEIGHT - 120, 0, HEIGHT);
+    horizon.addColorStop(0, 'rgba(255,45,120,0)');
+    horizon.addColorStop(1, 'rgba(255,45,120,.28)');
+    ctx.fillStyle = horizon;
+    ctx.fillRect(0, HEIGHT - 120, WIDTH, 120);
+
+    ctx.strokeStyle = 'rgba(167,139,250,.13)';
     ctx.lineWidth = 1;
     for (let x = 0; x < WIDTH; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, HEIGHT); ctx.stroke(); }
     for (let y = 0; y < HEIGHT; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WIDTH, y); ctx.stroke(); }
 
-    ctx.fillStyle = 'rgba(186,230,253,.7)';
     for (let i = 0; i < 32; i++) {
+      ctx.fillStyle = i % 3 === 0 ? 'rgba(255,190,230,.8)' : i % 3 === 1 ? 'rgba(165,243,252,.8)' : 'rgba(255,255,255,.7)';
       ctx.fillRect((i * 137 + Math.sin(g.time * 0.5 + i) * 18) % WIDTH, (i * 71 + g.time * 12) % HEIGHT, 2, 2);
     }
 
     // web line holding Spidey up
-    ctx.strokeStyle = 'rgba(125,211,252,.28)';
+    ctx.strokeStyle = 'rgba(165,243,252,.45)';
     ctx.lineWidth = 1.6;
-    ctx.beginPath(); ctx.moveTo(g.x, 0); ctx.lineTo(g.x, PLAYER_Y - 22); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(g.x, 0); ctx.lineTo(g.x, g.y - 38); ctx.stroke();
 
     // items
     ctx.textAlign = 'center';
@@ -855,8 +873,10 @@
         ctx.lineWidth = 2;
         ctx.beginPath(); ctx.arc(0, 0, 25 + Math.sin(g.time * 12) * 3, 0, Math.PI * 2); ctx.stroke();
       }
-      if (item.type === 'star') { ctx.shadowColor = '#ffcb6b'; ctx.shadowBlur = 20; }
-      if (item.type === 'shield' || item.type === 'slow') { ctx.shadowColor = '#3b82f6'; ctx.shadowBlur = 15; }
+      if (item.type === 'fruit') { ctx.shadowColor = 'rgba(255,255,255,.55)'; ctx.shadowBlur = 12; }
+      if (item.type === 'star') { ctx.shadowColor = '#ffcb6b'; ctx.shadowBlur = 24; }
+      if (item.type === 'webboost') { ctx.shadowColor = '#facc15'; ctx.shadowBlur = 22; }
+      if (item.type === 'shield' || item.type === 'slow') { ctx.shadowColor = '#22d3ee'; ctx.shadowBlur = 18; }
       ctx.font = '30px serif';
       ctx.fillText(item.emoji, 0, 0);
       ctx.restore();
@@ -903,13 +923,14 @@
     if (g.shield > 0) {
       ctx.strokeStyle = `rgba(96,165,250,${0.5 + 0.3 * Math.sin(g.time * 8)})`;
       ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.ellipse(g.x, PLAYER_Y, 43, 35, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(g.x, g.y, 43, 38, 0, 0, Math.PI * 2); ctx.stroke();
     }
 
     // Spidey leans a little towards where he's heading
     ctx.save();
-    ctx.translate(g.x, PLAYER_Y);
-    ctx.rotate(clamp((g.targetX - g.x) * 0.004, -0.22, 0.22));
+    ctx.translate(g.x, g.y);
+    ctx.rotate(clamp((g.vx || 0) * 0.03, -0.3, 0.3));       // leans into the direction of travel
+    ctx.scale(1, 1 + clamp(-(g.vy || 0) * 0.004, -0.06, 0.08));
     drawSpiderman();
     ctx.restore();
 
