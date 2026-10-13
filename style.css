@@ -1,4 +1,4 @@
-/* Version 4 - updated 2026-10-14 */
+/* Version 5 - updated 2026-10-14 */
 /* Seif Zaki portfolio styles */
 
 :root {
@@ -253,6 +253,34 @@ h1:hover .name, h1:hover .grad { animation: glitch .5s steps(2) 1; }
 @keyframes shine { to { left: 160%; } }
 .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
 .btn-ghost:hover { border-color: var(--blue); }
+
+/* featured project chip in the hero */
+.hero-project {
+  display: flex; align-items: center; gap: 1rem;
+  width: 100%; max-width: 460px;
+  margin-bottom: 2rem;
+  padding: .9rem 1.2rem;
+  text-align: left; text-decoration: none; color: var(--text);
+  background: linear-gradient(90deg, rgba(230,36,41,.10), rgba(59,130,246,.10));
+  border: 1px solid rgba(255,45,85,.45);
+  border-radius: 16px;
+  box-shadow: 0 0 28px rgba(230,36,41,.15);
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+.hero-project:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 8px 36px rgba(230,36,41,.35); }
+.hp-icon {
+  flex-shrink: 0;
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  border-radius: 13px;
+  background: var(--gradient);
+  font-size: 1.5rem;
+}
+.hp-text { display: flex; flex-direction: column; min-width: 0; }
+.hp-text b { color: #fff; font-size: .98rem; }
+.hp-text small { color: var(--muted); font-size: .78rem; }
+.hp-arrow { margin-left: auto; color: var(--accent); font-size: 1.3rem; transition: transform .25s; }
+.hero-project:hover .hp-arrow { transform: translateX(5px); }
 
 .stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
 .stat {

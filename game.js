@@ -1,4 +1,4 @@
-// Version 4 - updated 2026-10-14
+// Version 5 - updated 2026-10-14
 // Web Catcher - the little game at the bottom of the page.
 // Fly Spider-Man anywhere (free 2D movement), catch fruit, dodge bombs. Every 5 levels a scorpion boss shows up,
 // and from level 10 allies help out.
