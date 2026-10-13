@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05070d">
+  <title>Seif Zaki — BIS Student | Python Developer | Spider-Man Fan</title>
+  <meta name="description" content="Portfolio of Seif El-Sayed Zaki: Python, databases, networking and AI literacy.">
+  <meta property="og:title" content="Seif El-Sayed Zaki — Portfolio">
+  <meta property="og:description" content="BIS student, Python developer and Spider-Man fan. Certificates, CV and a small web game.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🕷️%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="progress"></div>
+<div class="sense" id="sense"></div>
+<div class="cur-dot" id="curDot"></div>
+<div class="cur-ring" id="curRing"></div>
+<canvas id="shots" aria-hidden="true"></canvas>
+<canvas id="web" aria-hidden="true"></canvas>
+
+<nav id="nav">
+  <a href="#home" class="logo">SEIF.ZAKI</a>
+  <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#cv">CV</a></li>
+    <li><a href="#certs">Certifications</a></li>
+    <li><a href="#game">Game</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="home">
+  <div class="strand"></div>
+  <div class="emblem" id="heroEmblem" aria-hidden="true">🕷</div>
+  <div class="badge"><span class="dot"></span> BIS Student · Capital University · Zamalek</div>
+  <h1><span class="name">SEIF</span> <span class="grad">EL-SAYED ZAKI</span></h1>
+  <div class="typing" id="typing" aria-label="Python Developer, BIS Student, Networking Enthusiast, Spider-Man Fan"></div>
+  <div class="quote-box">
+    <p>With great power comes great responsibility — and every line of code I write carries that responsibility.</p>
+    <div class="author">— Seif Zaki 🕸</div>
+  </div>
+  <div class="cta-group">
+    <a href="#certs" class="btn btn-primary">View My Certifications →</a>
+    <a href="#cv" class="btn btn-ghost">View My CV</a>
+    <a href="#game" class="btn btn-ghost">🕷 Play Game</a>
+    <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><b data-count="0" id="certCount">0</b><span>Certificates</span></div>
+    <div class="stat"><b data-count="3">0</b><span>Core tracks</span></div>
+    <div class="stat"><b data-count="2026">0</b><span>Still learning</span></div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<section id="about">
+  <div class="reveal">
+    <h2 class="section-title">About <span class="grad">Me</span></h2>
+    <p class="section-sub">// a young mind, coding through the web</p>
+
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm <strong>Seif El-Sayed Zaki Mahmoud</strong> — a <span class="highlight">Business Information Systems (BIS)</span> student at <span class="uni">Capital University, El Zamalek</span>.</p>
+        <p>Completed the full <strong>Python for Everybody Specialization</strong>, mastering <strong>IP addressing &amp; networking</strong> through Cisco, and <strong>AI Literacy</strong>.</p>
+        <p>As a Business Information Systems student bridging the gap between business strategy and technology, I am passionate about transforming raw data into clear, actionable insights.</p>
+        <p>My technical toolkit includes Python (Object-Oriented Programming, Pandas, Tkinter GUI), SQL querying, and advanced Microsoft Excel for data processing and analysis. Whether I am writing database queries, building automated workflows, or analyzing datasets, I enjoy solving complex problems with efficient code and structured data management.</p>
+        <div class="skills">
+          <span class="skill">Python</span>
+          <span class="skill">SQL</span>
+          <span class="skill">Data Analysis</span>
+          <span class="skill">Advanced Excel</span>
+          <span class="skill">OOP</span>
+          <span class="skill">Data Entry &amp; Processing</span>
+          <span class="skill">Networking</span>
+          <span class="skill">IP Addressing</span>
+          <span class="skill">AI Literacy</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="code-card" id="tilt">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <div class="code-line"><span class="cm"># seif_zaki.py</span></div>
+          <div class="code-line"><span class="kw">class</span> <span class="fn">SeifZaki</span>:</div>
+          <div class="code-line">  <span class="var">major</span>  = <span class="str">"BIS"</span></div>
+          <div class="code-line">  <span class="var">skills</span> = [<span class="str">"Python"</span>, <span class="str">"SQL"</span>, <span class="str">"Networking"</span>]</div>
+          <div class="code-line">  <span class="var">hero</span>   = <span class="str">"Spider-Man 🕷"</span></div>
+          <div class="code-line"> </div>
+          <div class="code-line">  <span class="kw">def</span> <span class="fn">motto</span>(self):</div>
+          <div class="code-line">    <span class="kw">return</span> <span class="str">"great power, great responsibility"</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h3>Networking &amp; Infrastructure</h3>
+        <p>IPv4 Subnetting, Cisco Packet Tracer, Basic Network Architecture</p>
+      </div>
+      <div class="skill-group">
+        <h3>Systems Analysis</h3>
+        <p>Functional Requirements Gathering, Workflow Mapping, Process Automation</p>
+      </div>
+      <div class="skill-group">
+        <h3>Project &amp; Workflow Management</h3>
+        <p>SDLC (Software Development Life Cycle), Technical Documentation, Agile Principles</p>
+      </div>
+      <div class="skill-group">
+        <h3>Programming &amp; Automation</h3>
+        <p>Python (OOP, Pandas, Tkinter/GUI)</p>
+      </div>
+      <div class="skill-group">
+        <h3>Databases &amp; Querying</h3>
+        <p>SQL, SQLite, Database Design</p>
+      </div>
+      <div class="skill-group">
+        <h3>Business Systems</h3>
+        <p>BIS Fundamentals, Data Entry, Systems Analysis</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cv">
+  <div class="reveal">
+    <h2 class="section-title">My <span class="grad">CV</span></h2>
+    <p class="section-sub">// the short version — full details in the PDF</p>
+    <div class="cv-grid">
+      <div class="cv-card">
+        <div class="cv-head">
+          <span class="cv-ico">📄</span>
+          <div>
+            <h3>Seif El-Sayed Zaki</h3>
+            <p>Customer Service &amp; Operations Specialist · Python · Excel · SQL</p>
+          </div>
+        </div>
+        <div class="cv-actions">
+          <button class="btn btn-primary" type="button" data-drive="12sDxEKHqsVVs2L90V_BiT1v4zLDGA0It" data-title="Seif El-Sayed Zaki — CV">Preview CV</button>
+          <a class="btn btn-ghost" href="https://drive.google.com/uc?export=download&amp;id=12sDxEKHqsVVs2L90V_BiT1v4zLDGA0It" rel="noopener">Download PDF</a>
+        </div>
+      </div>
+      <div class="cv-list">
+        <div class="cv-item">
+          <b>Concentrix</b>
+          <span>Customer Support &amp; Systems Operations Rep (English) · Oct 2025 – Present</span>
+          <p>Escalations, agent mentoring, real-time queue monitoring and SLA/KPI tracking.</p>
+        </div>
+        <div class="cv-item">
+          <b>Bachelor of Business Information Systems</b>
+          <span>GPA 3.88 / 4.0 · Expected 2028</span>
+          <p>Systems Analysis &amp; Design, Databases, Power BI, Python, Web Technologies.</p>
+        </div>
+        <div class="cv-item">
+          <b>Languages</b>
+          <span>Arabic — Native · English — C1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="reveal">
+    <h2 class="section-title">My <span class="grad">Certifications</span></h2>
+    <p class="section-sub">// verified achievements &amp; credentials — tap “Preview” to open one</p>
+    <input class="search" id="search" type="search" placeholder="Search certificates…" aria-label="Search certificates">
+    <div class="cert-grid" id="certGrid"></div>
+    <p class="empty" id="empty" hidden>No certificate matches that search.</p>
+    <div class="more-wrap"><button class="btn btn-ghost" id="moreBtn" type="button" hidden>Show all certificates</button></div>
+  </div>
+</section>
+
+<section id="game">
+  <div class="reveal">
+    <h2 class="section-title">Web <span class="grad">Catcher</span></h2>
+    <p class="section-sub">// a fierce scorpion boss every 5 levels · upgrade your web and recruit allies</p>
+
+    <div class="game-wrap" id="gameWrap">
+      <canvas id="gameCanvas" aria-label="Spider-Man catching game"></canvas>
+      <button class="game-fullscreen-btn" id="gFullscreen" type="button" aria-label="Toggle fullscreen game">⛶ FULL SCREEN</button>
+
+      <div class="hud">
+        <span>SCORE <b id="gScore">0</b></span>
+        <span>BEST <b id="gBest">0</b></span>
+        <span>LEVEL <b id="gLevel">1</b></span>
+        <span>COMBO <b id="gCombo">x1</b></span>
+        <span>LIVES <b id="gLives">❤️❤️❤️</b></span>
+      </div>
+
+      <div class="game-overlay" id="gOverlay">
+        <div class="emblem small" aria-hidden="true">🕷</div>
+        <h3 id="gTitle">Ready, Spidey?</h3>
+        <p id="gMsg">Catch 🍐 🍊 🍍 for points, grab 🌟 for a bonus and ❤️ for an extra life. Dodge 💣, collect 🛡️ and ⏳, and grab ⚡ to make your web 3x stronger. Shoot webs to destroy bombs. A fierce scorpion boss appears every 5 levels and grows stronger each time. Allies join you at levels 10, 20, 30…</p>
+        <button class="btn btn-primary" id="gStart" type="button">Start mission</button>
+      </div>
+    </div>
+
+    <div class="game-meter" aria-label="Progress to next level"><span id="gProgress"></span></div>
+
+    <div class="game-controls">
+      <p class="game-hint desktop">🖱️ Mouse or ← → / A D to move · SPACE: shoot web · E: shield · P: pause</p>
+      <p class="game-hint touch">👆 Drag to move · hold your finger down to shoot webs</p>
+      <div class="game-actions">
+        <button class="game-action" id="gShoot" type="button" disabled>🕸️ Shoot</button>
+        <button class="game-action" id="gShield" type="button" disabled>🛡️ Shield</button>
+        <button class="game-action" id="gPause" type="button" disabled>Ⅱ Pause</button>
+        <button class="game-action" id="gSound" type="button" aria-pressed="false">🔇 Sound: Off</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact reveal">
+    <h2>Let's Build Something <span class="grad">Amazing</span></h2>
+    <p>Feel free to reach out for collaborations or opportunities!</p>
+    <div class="contact-info">
+      <a href="https://wa.me/201110575784" class="contact-item" target="_blank" rel="noopener noreferrer">💬 WhatsApp 01110575784</a>
+      <a href="tel:+201515095784" class="contact-item">📞 +20 1515095784</a>
+      <a href="mailto:seifelsayed614@gmail.com" class="contact-item">📧 Email Me: seifelsayed614@gmail.com</a>
+      <a href="https://github.com/seif-zaki-hue" target="_blank" rel="noopener" class="contact-item">🔗 GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer><p>© 2026 Seif El-Sayed Zaki. Made with ❤️ &amp; Spider-Man energy.</p></footer>
+<button id="toTop" type="button" aria-label="Back to top">↑</button>
+
+<!-- popup used for the CV and certificate previews -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Document preview">
+  <div class="modal-box">
+    <div class="modal-bar">
+      <h4 id="modalTitle"></h4>
+      <div>
+        <a id="modalOpen" href="#" target="_blank" rel="noopener">Open in Drive</a>
+        <button id="modalClose" type="button">Close ✕</button>
+      </div>
+    </div>
+    <iframe id="modalFrame" title="Document preview"></iframe>
+  </div>
+</div>
+
+<script src="certificates.js"></script>
+<script src="main.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
